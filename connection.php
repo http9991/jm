@@ -1,4 +1,13 @@
 <?php
+
+
+
+
+
+
+
+
+
 $host='localhost';
 $sqllogin='root';
 $sqlpass='root';
