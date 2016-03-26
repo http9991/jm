@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <script src='build/js/jquery-2.2.0.min.js'>
+        </script>
+        <title>
+            Message application
+        </title>
+        <!-- main theme -->
+        <link rel="stylesheet" type="text/css" href="build/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="build/css/html_body_and_logo.css" />
+        <!-- warnings -->
+        <link rel="stylesheet" type="text/css" href="build/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="build/css/flip_animate.min.css" />
+        <!-- loading thing -->
+        <link rel="stylesheet" href="build/css/loading_effect.min.css"/>
+        <!-- telephone dropdown -->
+        <link rel="stylesheet" href="build/css/intlTelInput.css"/>
+        <!-- chat -->
+        <link rel="stylesheet" href="build/css_chat/reset.css"/>
+        <link rel='stylesheet' href='build/css/font-awesome.min.css'/>
+        <link rel="stylesheet" href="build/css_chat/style.css"/>
+        <link rel="stylesheet" href="build/css_chat/hover-min.css"/>
+        <link rel="stylesheet" href="examples/remodal.css"/>
+        <link rel="stylesheet" href="examples/remodal-default-theme.css"/>
+
+        <link rel="shortcut icon" href="build/img/fav.ico" type="image/x-icon">
+        <script src="examples/remodal.js">
+        </script>
+    </head>
+    <body>
+
+
+        <!-- extensions -->
+        <script src="build/js/vendor/modernizr.js">
+        </script>
+        <script src='build/js/handlebars-v4.0.5.js' >
+        </script>
+        <script src="build/js/list.min.js">
+
+        </script>
+       
+        <!-- all strophe and strophe plugins -->
+        <script src='build/js/strophe.min.js'>
+        </script>
+        <script src='build/js/strophe.register.min.js'>
+        </script>
+        <!-- validation register -->
+        <script src='build/js/validation_register.min.js'>
+        </script>
+        <script src="build/js/sending_saving_verf_code.min.js">
+        </script>
+        <!-- telephone dropdown -->
+        <script src="build/js/intlTelInput.min.js">
+        </script>
+        <script src="build/js/validation_telephone.min.js" defer>
+        </script>
+        <script src='build/js/utils.min.js'>
+        </script>
+        <!-- registration and login mechanism -->
+        <script src='build/js/login_and_register.min.js'>
+
+        </script>
+        
+        <!-- chat mecanism -->
+        <div class="remodal" data-remodal-id="friend_search"  role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc"data-remodal-options="hashTracking: false, closeOnOutsideClick: false" >
+            <button data-remodal-action="close" class="remodal-close" aria-label="Close">
+            </button>
+            <div>
+                <h2 id="modal1Title">
+                    Поиск контактов
+                </h2>
+                <p id="modal1Desc">
+                    <input type='tel' id='f_search' name='f_search'/>
+                </input>
+                <ul id='search_list'>
+                </ul>
+            </p>
+        </div>
+        <br/>
+        <button data-remodal-action="confirm" class="remodal-confirm hidden" id='search_button'>
+            Добавить
+        </button>
+    </div>
+    <div class="remodal" data-remodal-id="initializer_friend_list"  role="dialog" aria-labelledby="modal1Title" aria-describedby="initializer_friends"data-remodal-options="hashTracking: false, closeOnOutsideClick: false" >
+        <button data-remodal-action="close" class="remodal-close" aria-label="Close" id='initializer_friend_list_close'>
+        </button>
+        <div>
+            <h2 id="modal1Title">
+                Запросы на добавления в друзья, отправленные вами:
+            </h2>
+            <br/>
+            <div id='initializer_friend'>
+            </div>
+        </div>
+        <br/>
+    </div>
+        <div class="remodal" data-remodal-id="connection_lost"  role="dialog" aria-labelledby="modal1Title" aria-describedby="initializer_friends"data-remodal-options="hashTracking: false, closeOnOutsideClick: false" >
+        <button data-remodal-action="close" class="remodal-close" aria-label="Close" id='close_loading_erroe'>
+        </button>
+        <div>
+            <h2 id="modal1Title">
+                <button id='rec_bttn'>Переподключиться</button>>
+            </h2>
+            <br/>
+
+        </div>
+        <br/>
+    </div>
+    <div class="container" id='log_and_reg_main'>
+        <header>
+            <h1>
+                Message application
+                <span>
+                    with Openfire and Strophe.js
+                </span>
+            </h1>
+        </header>
+      <div class="windows8">
+    <div class="wBall" id="wBall_1">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_2">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_3">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_4">
+        <div class="wInnerBall"></div>
+    </div>
+    <div class="wBall" id="wBall_5">
+        <div class="wInnerBall"></div>
+    </div>
+</div>
+        <section>
+            <div id="container_demo">
+                <a class="hiddenanchor" id="toregister">
+                </a>
+                <a class="hiddenanchor" id="tologin">
+                </a>
+                <a class="hiddenanchor" id="tologin">
+                </a>
+                <a class="hiddenanchor" id='conn_lost' data-remodal-target="connection_lost" href='#'>
+                </a>
+
+                <div id="wrapper">
+                    <div id="login" class="animate form">
+                        <h1>
+                            Авторизация:
+                        </h1>
+                        <form id='login_form' onsubmit="return false;">
+                            <p>
+                                <label for="username" class="uname">
+                                    Ваш логин:
+                                </label>
+                                <input id="username" name="username" type="tel" />
+                                <i id='logo_complete_username' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_username' class="fa fa-times fa-3x hidden">
+                                </i>
+                            </p>
+                            <p>
+                                <label for="password" class="youpasswd" data-icon="p">
+                                    Ваш пароль:
+                                </label>
+                                <input id="password" name="password" type="password" placeholder="Пароль:" />
+                                <span id="login_failed">
+                                </span>
+                                <i id='logo_complete_password' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_password' class="fa fa-times fa-3x hidden">
+                                </i>
+                            </p>
+                            <button type="submit" id='login_button' class='login_register_button'>
+                                <b>
+                                    Войти
+                                </b>
+                            </button>
+                        </form>
+                        <p class="change_link">
+                            Еще не зарегистрированы?
+                            <a href="#toregister" class="to_register">
+                                Регистрация
+                            </a>
+                        </p>
+                    </div>
+                    <div id="register" class="animate form">
+                        <h1>
+                            Регистрация
+                        </h1>
+                        <form id="myForm">
+                            <p>
+                                <label for="usernamesignup" class="uname">
+                                    Телефонный номер:
+                                </label>
+                                <input id="usernamesignup" name="usernamesignup" type="tel" />
+                                <i id='logo_complete_username_signup' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_username_signup' class="fa fa-times fa-3x hidden">
+                                </i>
+                                <span id="error_username_signup">
+                                </span>
+                            </p>
+                            <p>
+                                <label for="fiosignup" class="ufioname" data-icon="u">
+                                    ФИО:
+                                </label>
+                                <input id="fiosignup" name="fiosignup" type="text" placeholder="ФИО:" />
+                                <i id='logo_complete_fio_signup' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_fio_signup' class="fa fa-times fa-3x hidden">
+                                </i>
+                                <span id="error_fio_signup">
+                                </span>
+                            </p>
+                            <p>
+                                <label for="emailsignup" class="youmail" data-icon="e">
+                                    E-mail:
+                                </label>
+                                <input id="emailsignup" name="emailsignup" type="email" placeholder="E-mail:" />
+                                <i id='logo_complete_email_signup' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_email_signup' class="fa fa-times fa-3x hidden">
+                                </i>
+                                <span id="error_email_signup">
+                                </span>
+                            </p>
+                            <p>
+                                <label for="passwordsignup" class="youpasswd" data-icon="p">
+                                    Пароль:
+                                </label>
+                                <input id="passwordsignup" name="passwordsignup" type="password" placeholder="Пароль:" />
+                                <i id='logo_complete_password_signup' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_password_signup' class="fa fa-times fa-3x hidden">
+                                </i>
+                                <span id="error_password_signup">
+                                </span>
+                                <span id="error_password_signup">
+                                </span>
+                            </p>
+                            <p>
+                                <label for="passwordsignup_confirm" class="youpasswd" data-icon="p">
+                                    Подтверждение пароля:
+                                </label>
+                                <input id="passwordsignup_confirm" name="passwordsignup_confirm" type="password" placeholder="Подтверждение пароля:" />
+                                <i id='logo_complete_password_confirm_signup' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_password_confirm_signup' class="fa fa-times fa-3x hidden">
+                                </i>
+                                <span id="error_complete_password_signup">
+                                </span>
+                            </p>
+                            <p>
+                                <label for="tel_confsignup" id='label_tel_conf' class="tel_conf" data-icon="p">
+                                    Код подтверждения телефона:
+                                </label>
+                                <input id="tel_confsignup" name="tel_confsignup" type="text" placeholder="Код:" />
+                                <i id='logo_complete_tel_conf_signup' class="fa fa-check fa-3x hidden">
+                                </i>
+                                <i id='logo_error_tel_conf_signup' class="fa fa-times fa-3x hidden">
+                                </i>
+                                <span id="error_tel_conf_signup">
+                                </span>
+                            </p>
+                            <button type="button" id='conf_button' class='login_register_button' onclick=tel_conf_send()>
+                                <b>
+                                    Отправить код
+                                </b>
+                            </button>
+                        </form>
+                        <p class="change_link" id='cl'>
+                            Уже зарегистрированы?
+                            <a href="#tologin" class="to_register">
+                                Войти
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="container_ch clearfix" id='chat_form_general'>
+        <a name="tochat">
+        </a>
+        <div class='profile'>
+            <img class='user_avatar' src="./chat_form/images_chat/Browsermodus.png (3358×1808) - Google Chrome 2016-02-09 21.48.54.png" alt="avatar" />
+            <div class="about_user" id='about_user'>
+                <div class="chat-with" id='chat-with'>
+                </div>
+                <select id='user_status'>
+                 <option>
+                        online
+                    </option>
+                    <option>
+                        offline
+                    </option>
+                   
+                </select>
+                <i class="fa fa-circle online">
+                </i>
+                &nbsp;
+            </div>
+            <i class="fa fa-cogs fa-lg">
+            </i>
+            <div class="remodal-bg" id='remodal-bg'>
+                <a data-remodal-target="friend_search" href="#">
+                    <i class="fa fa-user-plus fa-lg">
+                    </i>
+                </a>
+                <br/>
+            </div>
+        </div>
+        <div class="people-list" id="people-list">
+            <div class="search">
+                <i class="fa fa-binoculars fa-lg icon">
+                </i>
+                <input type="text" id='search_friends' placeholder="Поиск контактов" />
+            </div>
+            <div id="friend_add_event" class="friend_add_event hidden" >
+                <i class="fa fa-exclamation fa-lg">
+                </i>
+                <a id='notification_info' data-remodal-target="initializer_friend_list" href='#'>
+                    Нет текущих уведомлений
+                </a>
+            </div>
+            <br>
+            <div id="friend_query_event" class="friend_confirm_event hidden" >
+                <i class="fa fa-envelope fa-lg">
+                </i>
+                <a id='notification_info_query' data-remodal-target="initializer_friend_list" href='#'>
+                    Нет текущих уведомлений
+                </a>
+            </div>
+            <div class="list">
+            </div>
+        </div>
+        <div class="chat">
+            <div class="chat-header clearfix">
+                <img class='friend_avatar' src="./chat_form/images_chat/Browsermodus.png (3358×1808) - Google Chrome 2016-02-09 21.48.54.png" alt="avatar" />
+
+                <div class="chat-about">
+                    <div class="chat-with"></div>
+                    
+                    
+                </div>
+                <i class="fa fa-user"></i>
+            </div>
+            <!-- end chat-header -->
+            <div class="chat-history" style='display: none'>
+                <ul>
+                </ul>
+            </div>
+            <!-- end chat-history -->
+            <div class="chat-message clearfix">
+                <textarea name="message-to-send" id="message-to-send" placeholder="Сообщение:" rows="3"></textarea>
+                <i class="fa fa-file-o">
+                </i>
+                &nbsp;&nbsp;&nbsp;
+                <i class="fa fa-file-image-o">
+                </i>
+                <button class='grow' id='send_message'>Отправить</button>
+                 <input type='checkbox' id='errorgenerator'>
+            </div>
+            <!-- end chat-message -->
+        </div>
+        <!-- end chat -->
+    </div>
+    <!-- end container -->
+</body>
+<script id="message-template" type="text/x-handlebars-template">
+    <li class="clearfix {{class}}">
+        <div class="message-data align-right">
+            <span class="message-data-time" >
+                {{date}}
+            </span>
+            &nbsp; &nbsp;
+            <span class="message-data-name" >
+               
+            </span>
+            <i class="fa fa-circle me">
+            </i>
+        </div>
+        <div class="message other-message float-right">
+            {{messageOutput}}
+        </div>
+    </li>
+</script>
+<script id="message-response-template" type="text/x-handlebars-template">
+    <li class='{{class}}'>
+        <div class="message-data">
+            <span class="message-data-name-sender">
+                <i class="fa fa-circle online">
+                </i>
+               
+            </span>
+            <span class="message-data-time">
+                {{date}}
+            </span>
+        </div>
+        <div class="message my-message">
+            {{response}}
+        </div>
+    </li>
+</script>
+<script id="getcontacts-template" type="text/x-handlebars-template">
+<input type='radio' name='visi' id='vis{{idcontact}}' style='display: none;' ></input>
+
+        <label for='vis{{idcontact}}' class='key{{idcontact}}'>
+                         <div class='clearfix grow' name='mate{{idcontact}}'>
+
+                    <img class='avatar' src="./chat_form/images_chat/1.jpg" alt="avatar" />
+                    <div class="about">
+                        <div class="name">{{name}}</div>
+                                                <div class='jidfriend' style='display: none'>{{jid}}</div>
+                        <div class="status" style="color: #92959E;">
+                            
+                        </div>
+                    </div>
+                                </div>
+         </label>               
+                        <div class='chat-history' name='chat{{idcontact}}'><ul></ul></div>
+                      
+</script>
+
+<script src="build/js/filling_chat_and_search.js">
+</script>
+</html>

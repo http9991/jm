@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="remodal.css">
+    <link rel="stylesheet" href="remodal-default-theme.css">
+
+</head>
+
+<body>
+    <div class="remodal-bg">
+        <a href="#friend_search">Modal №1</a><br>
+    </div>
+
+
+
+    <div class="remodal" data-remodal-id="friend_search" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
+        <button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
+        <div>
+            <h2 id="modal1Title">Remodal</h2>
+            <p id="modal1Desc">
+                <input type=text id='f_search'></input>
+            </p>
+        </div>
+        <br>
+        <button data-remodal-action="cancel" class="remodal-cancel">Отмена</button>
+        <button data-remodal-action="confirm" class="remodal-confirm">Найти</button>
+    </div>
+
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="remodal.js"></script>
+
+    <!-- Events -->
+
+</body>
+
+</html>
